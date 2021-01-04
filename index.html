@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal Fee Calculator</title>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>PayPal Fee Calculator</h1>
+    <h3>Total=Net+Fee</h3>
+    <p>Net (Amount you receive): <input type="number" id='net'></p>
+    <p>Total (Amount sent): <input type="number" id='total'></p>
+    <p>Fee: <b id='fee'>0</b></p>
+
+    <script>
+        const tax=1.18
+        totalNode=document.querySelector('#total')
+        netNode=document.querySelector('#net')
+        feeNode=document.querySelector('#fee')
+
+        const feeCalculatorFromTotal=function(total){
+            fee=(total*4.4/100+0.3)*tax
+            return Number(fee.toFixed(2))
+        }
+
+        const feeCalculatorFromNet=function(net){
+            fee=(net*4.4/100+0.3)*tax/(1-4.4*tax/100)
+            return Number(fee.toFixed(2))
+        }
+
+        netNode.addEventListener('keyup',function(){
+            const net=Number(netNode.value)
+            const fee=feeCalculatorFromNet(net)
+            const total=net+fee
+            feeNode.textContent=fee
+            totalNode.value=total
+        })
+
+        totalNode.addEventListener('keyup',function(){
+            const total=Number(totalNode.value)
+            const fee=feeCalculatorFromTotal(total)
+            const net=total-fee
+            feeNode.textContent=fee
+            netNode.value=net
+        })
+    </script>
+</body>
+</html>
